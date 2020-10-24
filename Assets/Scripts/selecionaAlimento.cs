@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class selecionaAlimento : MonoBehaviour
 {
-    public alimentos[] saudaveis;
+    public alimentos[] inNatura;
+    public alimentos[] processados;
+    public alimentos[] ultraProcessados;
     public alimentos[] industrializados;
+    public alimentos[] saudaveis;
     public alimentos[] barraDeAlimentos;
 
     private Touch primeiroToque;
@@ -21,26 +24,18 @@ public class selecionaAlimento : MonoBehaviour
 
     void Update()
     {
-        //atulaliza o Texto na tela dependendo do estado do  toque e do estado de direção do vetor
-        m_Text.text = "Direção : " + dirx + " pivo: " + pivo + " start Pos: " + startPos;
-
-        //Mapeiar um toque unico como uma direção do controle
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-
-            //movimento do dedo baseado no "TouchPhase"
+            
             switch (touch.phase)
             {
-                //When a touch has first been detected, change the message and record the starting position
                 case TouchPhase.Began:
                 
-                    //Gravar a posição inicial do toque.
                     startPos = touch.position;
                     message = "Begun ";
                     break;
 
-                //Determine if the touch is a moving touch
                 case TouchPhase.Moved:
                     direction = touch.position - startPos;
                     if(Mathf.Abs(direction.x) > Screen.width*0.25f){    
@@ -55,7 +50,6 @@ public class selecionaAlimento : MonoBehaviour
                     }
                     break;
                 case TouchPhase.Ended:
-                    // Report that the touch has ended when it ends
                     pivo += dirx;
                     pivo = RestringeArray(pivo, barraDeAlimentos.Length);
                     recebeInstanciados.localPosition = new Vector3((pivo - (barraDeAlimentos.Length/2))*3, 3.27f, 0);
@@ -64,11 +58,10 @@ public class selecionaAlimento : MonoBehaviour
                     break;
             }
         }
-        //teste
     }
     void Start() {
         pivo = barraDeAlimentos.Length/2;
-        barraDeAlimentos = sorteiaAlimentos(saudaveis,industrializados, 10);
+        barraDeAlimentos = sorteiaAlimentos(inNatura, processados, ultraProcessados, 10);
         for (int i = 0; i < barraDeAlimentos.Length; i++)
         {
             Instantiate(barraDeAlimentos[i].prefab, new Vector3((i - (barraDeAlimentos.Length/2))*3, 3.27f, 0), Quaternion.identity, recebeInstanciados);
@@ -85,7 +78,7 @@ public class selecionaAlimento : MonoBehaviour
         return pivo;
     }
 
-    alimentos[] sorteiaAlimentos( alimentos[] saudaveis, alimentos[] industrializados, int tamanhoArray){
+    alimentos[] sorteiaAlimentos( alimentos[] inNatura, alimentos[] processados, alimentos[] ultraProcessados, int tamanhoArray){
         List<alimentos> teste = new List<alimentos>();
 
         for(int i = 0; i < tamanhoArray; i++){
@@ -114,8 +107,9 @@ public class selecionaAlimento : MonoBehaviour
 
     [System.Serializable]
     public class alimentos{
-        public string nome;
+        public string tag;
         public GameObject prefab;
         public int pontos;
+        
     }
 }
