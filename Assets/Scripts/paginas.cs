@@ -8,21 +8,14 @@ public class paginas : MonoBehaviour
 {
     public Button teste;
     public string scenename;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    public Canvas canvas;
     void Update()
     {
-        teste.onClick.AddListener(LoadA);
+        teste.onClick.AddListener(carregaCena);
         
     }
-    void LoadA()
+    void carregaCena()
     {
-        Debug.Log("sceneName to load: " + scenename);
-        SceneManager.LoadScene(scenename);
+        canvas.enabled = false;
     }
 }
