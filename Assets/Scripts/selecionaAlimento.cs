@@ -6,34 +6,81 @@ using UnityEngine.UI;
 public class selecionaAlimento : MonoBehaviour
 {
     public alimentos[] inNatura;
-    public alimentos[] processados;
     public alimentos[] ultraProcessados;
-    public alimentos[] industrializados;
-    public alimentos[] saudaveis;
     public alimentos[] barraDeAlimentos;
 
     private Touch primeiroToque;
     public Vector2 startPos;
     public Vector2 direction;
-
-    public Text m_Text;
-    string message;
     public int dirx, diry, pivo;
+
+    public bool enviarComida;
+
+    public bool moveuToque, soltouTela;
+
+    public GameObject objetoSelecionado; 
+
+    public Text scoreText;
+     
     
     public Transform recebeInstanciados;
 
+    private Vector3 target;
+
+    public int score;
+
+    void Start() {
+        barraDeAlimentos = sorteiaAlimentos(inNatura, ultraProcessados, 10);
+        for (int i = 0; i < barraDeAlimentos.Length; i++)
+        {
+            Instantiate(barraDeAlimentos[i].prefab, new Vector3((i + 1 - (barraDeAlimentos.Length/2))*3, 3.27f, -1.5f), Quaternion.identity, recebeInstanciados);
+        }
+        pivo = barraDeAlimentos.Length/2+1;
+        soltouTela = true;
+
+
+    }
     void Update()
     {
+        ReconheceToques();
+        
+        if(enviarComida){/*
+            foreach(alimentos alimento in inNatura){
+                if(objetoSelecionado.tag == alimento.tag()){
+                    score += alimento.pontos;
+                }
+            }
+            foreach(alimentos alimento in ultraProcessados){
+                if(objetoSelecionado.tag == alimento.tag()){
+                    score += alimento.pontos;
+                }
+            }
+            Destroy(objetoSelecionado);*/
+            scoreText.text = "enviando...";
+            enviarComida=false;
+        }
+        
+
+        if(soltouTela){
+            pivo += dirx;
+            dirx = 0;
+            pivo = RestringeArray(pivo, barraDeAlimentos.Length);
+            target = new Vector3((pivo - (barraDeAlimentos.Length/2))*3, 3.27f, -1.5f);
+            moveBarra(pivo);
+        }
+    }
+
+    void ReconheceToques(){
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
                 
                     startPos = touch.position;
-                    message = "Begun ";
                     break;
 
                 case TouchPhase.Moved:
@@ -45,27 +92,27 @@ public class selecionaAlimento : MonoBehaviour
                             dirx = -1;
                         }
                     }
-                    if((startPos.y < Screen.height*0.1f) && (direction.y > Screen.height*0.1f)){
-                        diry = 1;
+                    if((direction.y > Screen.height*0.1f)){
+                        enviarComida = true;
                     }
+                    moveuToque = true;
                     break;
                 case TouchPhase.Ended:
-                    pivo += dirx;
-                    pivo = RestringeArray(pivo, barraDeAlimentos.Length);
-                    recebeInstanciados.localPosition = new Vector3((pivo - (barraDeAlimentos.Length/2))*3, 3.27f, 0);
-                    dirx = 0;
-                    message = "Ending";
+                    soltouTela = true;
                     break;
             }
         }
     }
-    void Start() {
-        pivo = barraDeAlimentos.Length/2;
-        barraDeAlimentos = sorteiaAlimentos(inNatura, processados, ultraProcessados, 10);
-        for (int i = 0; i < barraDeAlimentos.Length; i++)
-        {
-            Instantiate(barraDeAlimentos[i].prefab, new Vector3((i - (barraDeAlimentos.Length/2))*3, 3.27f, 0), Quaternion.identity, recebeInstanciados);
+    
+    void moveBarra( int pivo){
+        float step =  25 * Time.deltaTime;
+        if(Mathf.Abs(recebeInstanciados.position.x - target.x) > 0){
+            recebeInstanciados.position = Vector3.MoveTowards(recebeInstanciados.position, target, step);
+        }else{
+            soltouTela=false;
         }
+       
+       
     }
 
     int RestringeArray(int pivo, int tamanhoDoArray){
@@ -78,38 +125,45 @@ public class selecionaAlimento : MonoBehaviour
         return pivo;
     }
 
-    alimentos[] sorteiaAlimentos( alimentos[] inNatura, alimentos[] processados, alimentos[] ultraProcessados, int tamanhoArray){
-        List<alimentos> teste = new List<alimentos>();
+    alimentos[] sorteiaAlimentos( alimentos[] inNatura, alimentos[] ultraProcessados, int tamanhoArray){
+        List<alimentos> ListaDeAlimentos = new List<alimentos>();
 
         for(int i = 0; i < tamanhoArray; i++){
-            alimentos testes = new alimentos();
+            alimentos novosAlimentos = new alimentos();
             switch(Random.Range(-1,2)){
                 case -1:
-                    testes = saudaveis[Random.Range(0,saudaveis.Length)];
+                    novosAlimentos = inNatura[Random.Range(0,inNatura.Length)];
                     break;
                 case 0:
-                    testes = saudaveis[Random.Range(0,saudaveis.Length)];
+                    novosAlimentos = inNatura[Random.Range(0,inNatura.Length)];
                     break;
                 case 1:
-                    testes = industrializados[Random.Range(0,industrializados.Length)];
+                    novosAlimentos = ultraProcessados[Random.Range(0,ultraProcessados.Length)];
                     break;
                 case 2:
-                    testes = industrializados[Random.Range(0,industrializados.Length)];
+                    novosAlimentos = ultraProcessados[Random.Range(0,ultraProcessados.Length)];
                     break;
                 default:
                     break;
             }
-            teste.Add(testes);
+            ListaDeAlimentos.Add(novosAlimentos);
         }
 
-        return teste.ToArray();
+        return ListaDeAlimentos.ToArray();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        objetoSelecionado = other.gameObject;
     }
 
     [System.Serializable]
     public class alimentos{
-        public string tag;
         public GameObject prefab;
         public int pontos;
-        
+
+        public string tag(){
+            return prefab.tag;
+        }
     }
 }

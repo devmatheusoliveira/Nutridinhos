@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4032479795380931195}
   - component: {fileID: 4032479795381701211}
   - component: {fileID: 4032479795382831259}
+  - component: {fileID: 135300842601088688}
   m_Layer: 0
   m_Name: pineapple
-  m_TagString: Untagged
+  m_TagString: pineapple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,3 +79,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!135 &135300842601088688
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4032479795380573787}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.23579563
+  m_Center: {x: 0, y: 0.23579563, z: 0}

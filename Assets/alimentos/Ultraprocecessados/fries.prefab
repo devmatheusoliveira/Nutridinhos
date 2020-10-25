@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 911098640126660664}
   - component: {fileID: 911098640127430680}
   - component: {fileID: 911098640128430808}
+  - component: {fileID: 135282847711577926}
   m_Layer: 0
   m_Name: fries
-  m_TagString: Untagged
+  m_TagString: Fritas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,6 +79,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!135 &135282847711577926
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911098640126233624}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1326302
+  m_Center: {x: 0, y: 0.117999986, z: 0}
 --- !u!1 &911098640126233626
 GameObject:
   m_ObjectHideFlags: 0

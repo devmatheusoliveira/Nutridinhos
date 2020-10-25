@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4507444815855074386}
   - component: {fileID: 4507444815855074387}
   - component: {fileID: 4507444815855074388}
+  - component: {fileID: 6999676664821269619}
   m_Layer: 0
   m_Name: apple
-  m_TagString: Untagged
+  m_TagString: apple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,3 +80,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!135 &6999676664821269619
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4507444815855074389}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.09814727
+  m_Center: {x: 0, y: 0.09537669, z: 0}
