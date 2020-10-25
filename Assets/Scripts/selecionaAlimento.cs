@@ -14,22 +14,21 @@ public class selecionaAlimento : MonoBehaviour
     public Vector2 direction;
     public int dirx, diry, pivo;
 
-    public bool enviarComida;
+    public bool enviarComida, empurraComida;
 
-    public bool moveuToque, soltouTela;
+    public bool soltouTela = false;
 
     public GameObject objetoSelecionado; 
-
-    public Text scoreText;
-     
-    
     public Transform recebeInstanciados;
 
     private Vector3 target;
 
     public int score;
 
+
     void Start() {
+        
+
         barraDeAlimentos = sorteiaAlimentos(inNatura, ultraProcessados, 10);
         for (int i = 0; i < barraDeAlimentos.Length; i++)
         {
@@ -38,28 +37,21 @@ public class selecionaAlimento : MonoBehaviour
         pivo = barraDeAlimentos.Length/2+1;
         soltouTela = true;
 
-
     }
     void Update()
     {
         ReconheceToques();
         
-        if(enviarComida){/*
-            foreach(alimentos alimento in inNatura){
-                if(objetoSelecionado.tag == alimento.tag()){
-                    score += alimento.pontos;
-                }
-            }
-            foreach(alimentos alimento in ultraProcessados){
-                if(objetoSelecionado.tag == alimento.tag()){
-                    score += alimento.pontos;
-                }
-            }
-            Destroy(objetoSelecionado);*/
-            scoreText.text = "enviando...";
-            enviarComida=false;
+        if(enviarComida){
+            
+            empurraComida = true;
+            enviarComida = false;
         }
         
+        
+        if(empurraComida){
+            comidaEmpurrada();
+        }
 
         if(soltouTela){
             pivo += dirx;
@@ -69,6 +61,8 @@ public class selecionaAlimento : MonoBehaviour
             moveBarra(pivo);
         }
     }
+
+    
 
     void ReconheceToques(){
 
@@ -95,7 +89,6 @@ public class selecionaAlimento : MonoBehaviour
                     if((direction.y > Screen.height*0.1f)){
                         enviarComida = true;
                     }
-                    moveuToque = true;
                     break;
                 case TouchPhase.Ended:
                     soltouTela = true;
@@ -110,9 +103,17 @@ public class selecionaAlimento : MonoBehaviour
             recebeInstanciados.position = Vector3.MoveTowards(recebeInstanciados.position, target, step);
         }else{
             soltouTela=false;
+        }  
+    }
+    void comidaEmpurrada(){
+        float step =  25 * Time.deltaTime;
+        if(objetoSelecionado != null){
+            if(Mathf.Abs(objetoSelecionado.transform.position.z - new Vector3(0,3.75f,1.75f).z) > 0){
+                objetoSelecionado.transform.position = Vector3.MoveTowards(objetoSelecionado.transform.position, new Vector3(0,3.75f,1.75f), step);
+            }
+        }else{
+            empurraComida=false;
         }
-       
-       
     }
 
     int RestringeArray(int pivo, int tamanhoDoArray){
@@ -157,7 +158,9 @@ public class selecionaAlimento : MonoBehaviour
         objetoSelecionado = other.gameObject;
     }
 
-    [System.Serializable]
+    
+}
+[System.Serializable]
     public class alimentos{
         public GameObject prefab;
         public int pontos;
@@ -166,4 +169,3 @@ public class selecionaAlimento : MonoBehaviour
             return prefab.tag;
         }
     }
-}
